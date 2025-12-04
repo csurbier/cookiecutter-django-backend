@@ -6,11 +6,11 @@ export STATIC_URL_PREFIX=/static
 export MEDIA_URL_PREFIX=/media
 export APP_HOME=
 # Database - PostgreSQL
-export DATABASE_NAME=your_db_name
-export DATABASE_USER=your_db_user
-export DATABASE_PASSWORD=your_db_password
-export DATABASE_HOST=localhost
-export DATABASE_PORT=5432
+export POSTGRESQL_ADDON_DB=your_db_name
+export POSTGRESQL_ADDON_USER=your_db_user
+export POSTGRESQL_ADDON_PASSWORD=your_db_password
+export POSTGRESQL_ADDON_HOST=localhost
+export POSTGRESQL_ADDON_PORT=5432
 
 # Redis
 
