@@ -56,9 +56,9 @@
 							"raw": "{\n    \"email\": \"test@example.com\",\n    \"password\": \"testpass123\",\n    \"re_password\": \"testpass123\",\n    \"first_name\": \"Test\",\n    \"last_name\": \"User\"\n}"
 						},
 						"url": {
-							"raw": "{{base_url}}/api/auth/users/",
+							"raw": "{{{{base_url}}}}/api/auth/users/",
 							"host": [
-								"{{base_url}}"
+								"{{{{base_url}}}}"
 							],
 							"path": [
 								"api",
@@ -101,9 +101,9 @@
 							"raw": "{\n    \"email\": \"test@example.com\",\n    \"password\": \"testpass123\"\n}"
 						},
 						"url": {
-							"raw": "{{base_url}}/api/auth/jwt/create/",
+							"raw": "{{{{base_url}}}}/api/auth/jwt/create/",
 							"host": [
-								"{{base_url}}"
+								"{{{{base_url}}}}"
 							],
 							"path": [
 								"api",
@@ -143,12 +143,12 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"refresh\": \"{{refresh_token}}\"\n}"
+							"raw": "{\n    \"refresh\": \"{{{{refresh_token}}}}\"\n}"
 						},
 						"url": {
-							"raw": "{{base_url}}/api/auth/jwt/refresh/",
+							"raw": "{{{{base_url}}}}/api/auth/jwt/refresh/",
 							"host": [
-								"{{base_url}}"
+								"{{{{base_url}}}}"
 							],
 							"path": [
 								"api",
@@ -169,14 +169,14 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer {{access_token}}",
+								"value": "Bearer {{{{access_token}}}}",
 								"type": "text"
 							}
 						],
 						"url": {
-							"raw": "{{base_url}}/api/auth/users/me/",
+							"raw": "{{{{base_url}}}}/api/auth/users/me/",
 							"host": [
-								"{{base_url}}"
+								"{{{{base_url}}}}"
 							],
 							"path": [
 								"api",
@@ -197,7 +197,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer {{access_token}}",
+								"value": "Bearer {{{{access_token}}}}",
 								"type": "text"
 							},
 							{
@@ -210,9 +210,9 @@
 							"raw": "{\n    \"first_name\": \"Updated\",\n    \"last_name\": \"Name\"\n}"
 						},
 						"url": {
-							"raw": "{{base_url}}/api/auth/users/me/",
+							"raw": "{{{{base_url}}}}/api/auth/users/me/",
 							"host": [
-								"{{base_url}}"
+								"{{{{base_url}}}}"
 							],
 							"path": [
 								"api",
@@ -233,7 +233,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer {{access_token}}",
+								"value": "Bearer {{{{access_token}}}}",
 								"type": "text"
 							},
 							{
@@ -246,9 +246,9 @@
 							"raw": "{\n    \"current_password\": \"testpass123\",\n    \"new_password\": \"newpass123\",\n    \"re_new_password\": \"newpass123\"\n}"
 						},
 						"url": {
-							"raw": "{{base_url}}/api/auth/users/set_password/",
+							"raw": "{{{{base_url}}}}/api/auth/users/set_password/",
 							"host": [
-								"{{base_url}}"
+								"{{{{base_url}}}}"
 							],
 							"path": [
 								"api",
@@ -275,14 +275,14 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer {{access_token}}",
+								"value": "Bearer {{{{access_token}}}}",
 								"type": "text"
 							}
 						],
 						"url": {
-							"raw": "{{base_url}}/api/users/?page=1",
+							"raw": "{{{{base_url}}}}/api/users/?page=1",
 							"host": [
-								"{{base_url}}"
+								"{{{{base_url}}}}"
 							],
 							"path": [
 								"api",
@@ -307,14 +307,14 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer {{access_token}}",
+								"value": "Bearer {{{{access_token}}}}",
 								"type": "text"
 							}
 						],
 						"url": {
-							"raw": "{{base_url}}/api/users/1/",
+							"raw": "{{{{base_url}}}}/api/users/1/",
 							"host": [
-								"{{base_url}}"
+								"{{{{base_url}}}}"
 							],
 							"path": [
 								"api",
@@ -334,14 +334,14 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer {{access_token}}",
+								"value": "Bearer {{{{access_token}}}}",
 								"type": "text"
 							}
 						],
 						"url": {
-							"raw": "{{base_url}}/api/users/me/",
+							"raw": "{{{{base_url}}}}/api/users/me/",
 							"host": [
-								"{{base_url}}"
+								"{{{{base_url}}}}"
 							],
 							"path": [
 								"api",
@@ -390,9 +390,9 @@
 							"raw": "{\n    \"email\": \"test@example.com\",\n    \"password\": \"testpass123\"\n}"
 						},
 						"url": {
-							"raw": "{{base_url}}/api/token/",
+							"raw": "{{{{base_url}}}}/api/token/",
 							"host": [
-								"{{base_url}}"
+								"{{{{base_url}}}}"
 							],
 							"path": [
 								"api",
@@ -430,12 +430,12 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"refresh\": \"{{refresh_token}}\"\n}"
+							"raw": "{\n    \"refresh\": \"{{{{refresh_token}}}}\"\n}"
 						},
 						"url": {
-							"raw": "{{base_url}}/api/token/refresh/",
+							"raw": "{{{{base_url}}}}/api/token/refresh/",
 							"host": [
-								"{{base_url}}"
+								"{{{{base_url}}}}"
 							],
 							"path": [
 								"api",
