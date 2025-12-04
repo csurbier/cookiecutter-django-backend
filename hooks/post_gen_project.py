@@ -22,7 +22,7 @@ def make_dirs():
     
     for dir_name in dirs:
         os.makedirs(dir_name, exist_ok=True)
-        print(f"✓ Created directory: {dir_name}")
+        print("✓ Created directory: " + dir_name)
 
 
 def make_executable():
@@ -31,33 +31,29 @@ def make_executable():
     if os.path.exists(manage_py):
         st = os.stat(manage_py)
         os.chmod(manage_py, st.st_mode | stat.S_IEXEC)
-        print(f"✓ Made {manage_py} executable")
+        print("✓ Made " + manage_py + " executable")
 
 
 def create_postman_collection():
     """Create Postman collection file with proper variable escaping."""
-    # Get cookiecutter context
-    import sys
-    context_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'cookiecutter.json')
-    if os.path.exists(context_file):
-        import json as json_module
-        with open(context_file, 'r') as f:
-            cookiecutter_vars = json_module.load(f)
-    else:
-        # Fallback: try to get from environment or use defaults
-        cookiecutter_vars = {}
-    
     # Get actual values from the generated project context
-    # These are available in the current directory context
     project_slug = os.path.basename(os.getcwd())
     project_name = project_slug.replace('_', ' ').title()
     
-    # Postman collection template with Postman variables properly escaped
+    # Build Postman variables using chr() to avoid Jinja2 interpretation
+    # Using chr() ensures braces are constructed at runtime, not in source code
+    open_brace = chr(123)  # {
+    close_brace = chr(125)  # }
+    postman_base_url = open_brace + open_brace + "base_url" + close_brace + close_brace
+    postman_access_token = open_brace + open_brace + "access_token" + close_brace + close_brace
+    postman_refresh_token = open_brace + open_brace + "refresh_token" + close_brace + close_brace
+    
+    # Build Postman collection as Python dict (to avoid Jinja2 interpretation)
     postman_collection = {
         "info": {
-            "_postman_id": f"{project_slug}-api-collection",
-            "name": f"{project_name} API",
-            "description": f"Collection Postman pour tester l'API {project_name}",
+            "_postman_id": project_slug + "-api-collection",
+            "name": project_name + " API",
+            "description": "Collection Postman pour tester l'API " + project_name,
             "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
         },
         "variable": [
@@ -111,8 +107,8 @@ def create_postman_collection():
                                 "raw": "{\n    \"email\": \"test@example.com\",\n    \"password\": \"testpass123\",\n    \"re_password\": \"testpass123\",\n    \"first_name\": \"Test\",\n    \"last_name\": \"User\"\n}"
                             },
                             "url": {
-                                "raw": "{{base_url}}/api/auth/users/",
-                                "host": ["{{base_url}}"],
+                                "raw": postman_base_url + "/api/auth/users/",
+                                "host": [postman_base_url],
                                 "path": ["api", "auth", "users", ""]
                             },
                             "description": "Créer un nouvel utilisateur"
@@ -149,8 +145,8 @@ def create_postman_collection():
                                 "raw": "{\n    \"email\": \"test@example.com\",\n    \"password\": \"testpass123\"\n}"
                             },
                             "url": {
-                                "raw": "{{base_url}}/api/auth/jwt/create/",
-                                "host": ["{{base_url}}"],
+                                "raw": postman_base_url + "/api/auth/jwt/create/",
+                                "host": [postman_base_url],
                                 "path": ["api", "auth", "jwt", "create", ""]
                             },
                             "description": "Obtenir un token JWT (access + refresh)"
@@ -183,11 +179,11 @@ def create_postman_collection():
                             ],
                             "body": {
                                 "mode": "raw",
-                                "raw": "{\n    \"refresh\": \"{{refresh_token}}\"\n}"
+                                "raw": "{\n    \"refresh\": \"" + postman_refresh_token + "\"\n}"
                             },
                             "url": {
-                                "raw": "{{base_url}}/api/auth/jwt/refresh/",
-                                "host": ["{{base_url}}"],
+                                "raw": postman_base_url + "/api/auth/jwt/refresh/",
+                                "host": [postman_base_url],
                                 "path": ["api", "auth", "jwt", "refresh", ""]
                             },
                             "description": "Rafraîchir le token JWT (obtenir un nouveau access token)"
@@ -201,13 +197,13 @@ def create_postman_collection():
                             "header": [
                                 {
                                     "key": "Authorization",
-                                    "value": "Bearer {{access_token}}",
+                                    "value": "Bearer " + postman_access_token,
                                     "type": "text"
                                 }
                             ],
                             "url": {
-                                "raw": "{{base_url}}/api/auth/users/me/",
-                                "host": ["{{base_url}}"],
+                                "raw": postman_base_url + "/api/auth/users/me/",
+                                "host": [postman_base_url],
                                 "path": ["api", "auth", "users", "me", ""]
                             },
                             "description": "Obtenir les informations de l'utilisateur actuel via Djoser"
@@ -221,7 +217,7 @@ def create_postman_collection():
                             "header": [
                                 {
                                     "key": "Authorization",
-                                    "value": "Bearer {{access_token}}",
+                                    "value": "Bearer " + postman_access_token,
                                     "type": "text"
                                 },
                                 {
@@ -234,8 +230,8 @@ def create_postman_collection():
                                 "raw": "{\n    \"first_name\": \"Updated\",\n    \"last_name\": \"Name\"\n}"
                             },
                             "url": {
-                                "raw": "{{base_url}}/api/auth/users/me/",
-                                "host": ["{{base_url}}"],
+                                "raw": postman_base_url + "/api/auth/users/me/",
+                                "host": [postman_base_url],
                                 "path": ["api", "auth", "users", "me", ""]
                             },
                             "description": "Mettre à jour les informations de l'utilisateur actuel"
@@ -249,7 +245,7 @@ def create_postman_collection():
                             "header": [
                                 {
                                     "key": "Authorization",
-                                    "value": "Bearer {{access_token}}",
+                                    "value": "Bearer " + postman_access_token,
                                     "type": "text"
                                 },
                                 {
@@ -262,8 +258,8 @@ def create_postman_collection():
                                 "raw": "{\n    \"current_password\": \"testpass123\",\n    \"new_password\": \"newpass123\",\n    \"re_new_password\": \"newpass123\"\n}"
                             },
                             "url": {
-                                "raw": "{{base_url}}/api/auth/users/set_password/",
-                                "host": ["{{base_url}}"],
+                                "raw": postman_base_url + "/api/auth/users/set_password/",
+                                "host": [postman_base_url],
                                 "path": ["api", "auth", "users", "set_password", ""]
                             },
                             "description": "Changer le mot de passe de l'utilisateur actuel"
@@ -283,13 +279,13 @@ def create_postman_collection():
                             "header": [
                                 {
                                     "key": "Authorization",
-                                    "value": "Bearer {{access_token}}",
+                                    "value": "Bearer " + postman_access_token,
                                     "type": "text"
                                 }
                             ],
                             "url": {
-                                "raw": "{{base_url}}/api/users/?page=1",
-                                "host": ["{{base_url}}"],
+                                "raw": postman_base_url + "/api/users/?page=1",
+                                "host": [postman_base_url],
                                 "path": ["api", "users", ""],
                                 "query": [
                                     {
@@ -309,13 +305,13 @@ def create_postman_collection():
                             "header": [
                                 {
                                     "key": "Authorization",
-                                    "value": "Bearer {{access_token}}",
+                                    "value": "Bearer " + postman_access_token,
                                     "type": "text"
                                 }
                             ],
                             "url": {
-                                "raw": "{{base_url}}/api/users/1/",
-                                "host": ["{{base_url}}"],
+                                "raw": postman_base_url + "/api/users/1/",
+                                "host": [postman_base_url],
                                 "path": ["api", "users", "1", ""]
                             },
                             "description": "Obtenir les détails d'un utilisateur par son ID"
@@ -329,13 +325,13 @@ def create_postman_collection():
                             "header": [
                                 {
                                     "key": "Authorization",
-                                    "value": "Bearer {{access_token}}",
+                                    "value": "Bearer " + postman_access_token,
                                     "type": "text"
                                 }
                             ],
                             "url": {
-                                "raw": "{{base_url}}/api/users/me/",
-                                "host": ["{{base_url}}"],
+                                "raw": postman_base_url + "/api/users/me/",
+                                "host": [postman_base_url],
                                 "path": ["api", "users", "me", ""]
                             },
                             "description": "Obtenir les informations de l'utilisateur actuel via l'endpoint custom"
@@ -378,8 +374,8 @@ def create_postman_collection():
                                 "raw": "{\n    \"email\": \"test@example.com\",\n    \"password\": \"testpass123\"\n}"
                             },
                             "url": {
-                                "raw": "{{base_url}}/api/token/",
-                                "host": ["{{base_url}}"],
+                                "raw": postman_base_url + "/api/token/",
+                                "host": [postman_base_url],
                                 "path": ["api", "token", ""]
                             },
                             "description": "Alternative endpoint pour obtenir un token JWT"
@@ -412,11 +408,11 @@ def create_postman_collection():
                             ],
                             "body": {
                                 "mode": "raw",
-                                "raw": "{\n    \"refresh\": \"{{refresh_token}}\"\n}"
+                                "raw": "{\n    \"refresh\": \"" + postman_refresh_token + "\"\n}"
                             },
                             "url": {
-                                "raw": "{{base_url}}/api/token/refresh/",
-                                "host": ["{{base_url}}"],
+                                "raw": postman_base_url + "/api/token/refresh/",
+                                "host": [postman_base_url],
                                 "path": ["api", "token", "refresh", ""]
                             },
                             "description": "Alternative endpoint pour rafraîchir le token JWT"
@@ -429,7 +425,7 @@ def create_postman_collection():
         ]
     }
     
-    # Write the file
+    # Write the file using json.dump
     with open('postman_collection.json', 'w', encoding='utf-8') as f:
         json.dump(postman_collection, f, indent='\t', ensure_ascii=False)
     print("✓ Created postman_collection.json")
@@ -442,7 +438,7 @@ if __name__ == '__main__':
     create_postman_collection()
     print("\n✅ Project setup complete!")
     print("\n📝 Next steps:")
-    print("  1. Copy env.example to .env and configure it")
+    print("  1. Source the varEnv.sh file to set the environment variables")
     print("  2. Install dependencies: pip install -r requirements.txt")
     print("  3. Run migrations: python manage.py migrate")
     print("  4. Create superuser: python manage.py createsuperuser")

@@ -103,8 +103,10 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 
 #statics
-STATIC_URL = os.getenv('STATIC_URL_PREFIX')+'/'
-STATIC_ROOT = 'static'
+STATIC_URL = os.getenv('STATIC_URL_PREFIX', '/static/')
+if not STATIC_URL.endswith('/'):
+    STATIC_URL += '/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 #STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.CachedStaticFilesStorage'
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
@@ -112,7 +114,8 @@ STATICFILES_FINDERS = (
     # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 STATICFILES_DIRS = [
-    BASE_DIR + '/static/wiki/site/',  # Assuming 'docs' is the directory containing your mkdocs files
+    # Add custom static files directories here if needed
+    # Example: BASE_DIR / 'static' / 'custom',
 ]
 
 # Internationalization
@@ -124,8 +127,10 @@ USE_TZ = True
 DATE_FORMAT = 'd F Y'
 
 
-MEDIA_ROOT=os.getenv("APP_HOME")+os.getenv("MEDIA_URL_PREFIX")+'/storage/'
-MEDIA_URL = os.getenv('MEDIA_URL_PREFIX')+"/storage/"
+MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = os.getenv('MEDIA_URL_PREFIX', '/media/')
+if not MEDIA_URL.endswith('/'):
+    MEDIA_URL += '/'
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

@@ -1,3 +1,6 @@
+# Core Python packages
+setuptools>=69.0.0
+
 # Django
 Django=={{ cookiecutter.django_version }}
 djangorestframework==3.14.0
@@ -9,10 +12,10 @@ djoser==2.2.0
 djangorestframework-simplejwt==5.3.0
 
 # Security
-django-axes==6.1.2
+django-axes==6.5.2
 
 # Database
-psycopg2-binary==2.9.9
+psycopg[binary]==3.3.1
 
 # Cache & Task Queue
 {% if cookiecutter.use_redis == "yes" %}

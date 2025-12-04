@@ -1,0 +1,376 @@
+{
+	"info": {
+		"_postman_id": "PROJECT_SLUG-api-collection",
+		"name": "PROJECT_NAME API",
+		"description": "Collection Postman pour tester l'API PROJECT_NAME",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000",
+			"type": "string"
+		},
+		{
+			"key": "access_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "refresh_token",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Create User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    pm.environment.set('user_id', response.id);",
+									"    pm.environment.set('user_email', response.email);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"test@example.com\",\n    \"password\": \"testpass123\",\n    \"re_password\": \"testpass123\",\n    \"first_name\": \"Test\",\n    \"last_name\": \"User\"\n}"
+						},
+						"url": {
+							"raw": "BASE_URL_VAR/api/auth/users/",
+							"host": ["BASE_URL_VAR"],
+							"path": ["api", "auth", "users", ""]
+						},
+						"description": "Créer un nouvel utilisateur"
+					},
+					"response": []
+				},
+				{
+					"name": "Get JWT Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    pm.collectionVariables.set('access_token', response.access);",
+									"    pm.collectionVariables.set('refresh_token', response.refresh);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"test@example.com\",\n    \"password\": \"testpass123\"\n}"
+						},
+						"url": {
+							"raw": "BASE_URL_VAR/api/auth/jwt/create/",
+							"host": ["BASE_URL_VAR"],
+							"path": ["api", "auth", "jwt", "create", ""]
+						},
+						"description": "Obtenir un token JWT (access + refresh)"
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh JWT Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    pm.collectionVariables.set('access_token', response.access);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"refresh\": \"REFRESH_TOKEN_VAR\"\n}"
+						},
+						"url": {
+							"raw": "BASE_URL_VAR/api/auth/jwt/refresh/",
+							"host": ["BASE_URL_VAR"],
+							"path": ["api", "auth", "jwt", "refresh", ""]
+						},
+						"description": "Rafraîchir le token JWT (obtenir un nouveau access token)"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Current User (Djoser)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer ACCESS_TOKEN_VAR",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "BASE_URL_VAR/api/auth/users/me/",
+							"host": ["BASE_URL_VAR"],
+							"path": ["api", "auth", "users", "me", ""]
+						},
+						"description": "Obtenir les informations de l'utilisateur actuel via Djoser"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Current User",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer ACCESS_TOKEN_VAR",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"first_name\": \"Updated\",\n    \"last_name\": \"Name\"\n}"
+						},
+						"url": {
+							"raw": "BASE_URL_VAR/api/auth/users/me/",
+							"host": ["BASE_URL_VAR"],
+							"path": ["api", "auth", "users", "me", ""]
+						},
+						"description": "Mettre à jour les informations de l'utilisateur actuel"
+					},
+					"response": []
+				},
+				{
+					"name": "Change Password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer ACCESS_TOKEN_VAR",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"current_password\": \"testpass123\",\n    \"new_password\": \"newpass123\",\n    \"re_new_password\": \"newpass123\"\n}"
+						},
+						"url": {
+							"raw": "BASE_URL_VAR/api/auth/users/set_password/",
+							"host": ["BASE_URL_VAR"],
+							"path": ["api", "auth", "users", "set_password", ""]
+						},
+						"description": "Changer le mot de passe de l'utilisateur actuel"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints d'authentification avec Djoser et JWT"
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "List Users",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer ACCESS_TOKEN_VAR",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "BASE_URL_VAR/api/users/?page=1",
+							"host": ["BASE_URL_VAR"],
+							"path": ["api", "users", ""],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Liste paginée de tous les utilisateurs (authentification requise)"
+					},
+					"response": []
+				},
+				{
+					"name": "Get User by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer ACCESS_TOKEN_VAR",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "BASE_URL_VAR/api/users/1/",
+							"host": ["BASE_URL_VAR"],
+							"path": ["api", "users", "1", ""]
+						},
+						"description": "Obtenir les détails d'un utilisateur par son ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Current User (Custom Endpoint)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer ACCESS_TOKEN_VAR",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "BASE_URL_VAR/api/users/me/",
+							"host": ["BASE_URL_VAR"],
+							"path": ["api", "users", "me", ""]
+						},
+						"description": "Obtenir les informations de l'utilisateur actuel via l'endpoint custom"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints pour gérer les utilisateurs"
+		},
+		{
+			"name": "Alternative Token Endpoints",
+			"item": [
+				{
+					"name": "Get Token (Alternative)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    pm.collectionVariables.set('access_token', response.access);",
+									"    pm.collectionVariables.set('refresh_token', response.refresh);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"test@example.com\",\n    \"password\": \"testpass123\"\n}"
+						},
+						"url": {
+							"raw": "BASE_URL_VAR/api/token/",
+							"host": ["BASE_URL_VAR"],
+							"path": ["api", "token", ""]
+						},
+						"description": "Alternative endpoint pour obtenir un token JWT"
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh Token (Alternative)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    pm.collectionVariables.set('access_token', response.access);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"refresh\": \"REFRESH_TOKEN_VAR\"\n}"
+						},
+						"url": {
+							"raw": "BASE_URL_VAR/api/token/refresh/",
+							"host": ["BASE_URL_VAR"],
+							"path": ["api", "token", "refresh", ""]
+						},
+						"description": "Alternative endpoint pour rafraîchir le token JWT"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints alternatifs pour les tokens JWT"
+		}
+	]
+}
+
