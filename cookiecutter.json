@@ -1,0 +1,14 @@
+{
+  "project_name": "My Django Backend",
+  "project_slug": "{{ cookiecutter.project_name.lower().replace(' ', '_').replace('-', '_') }}",
+  "project_description": "A Django backend with email authentication, Djoser, and security features",
+  "author_name": "Your Name",
+  "author_email": "your.email@example.com",
+  "django_version": "5.0",
+  "python_version": "3.11",
+  "use_redis": "yes",
+  "use_celery": "yes",
+  "timezone": "Europe/Paris",
+  "language_code": "fr-fr"
+}
+
