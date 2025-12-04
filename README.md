@@ -46,7 +46,7 @@ Lors de la génération, vous serez invité à renseigner :
 - `author_name` : Nom de l'auteur
 - `author_email` : Email de l'auteur
 - `django_version` : Version de Django (par défaut: 5.0)
-- `python_version` : Version de Python (par défaut: 3.11)
+- `python_version` : Version de Python (par défaut: 3.12)
 - `use_redis` : Utiliser Redis (yes/no)
 - `use_celery` : Utiliser Celery (yes/no)
 - `timezone` : Fuseau horaire
